@@ -33,7 +33,7 @@ The engine combines deep learning and classical adversarial game search:
 - **Modern Search Architecture**:
   - Minimax with Alpha-Beta pruning
   - Iterative Deepening
-  - Transposition Tables (TT) with Zobrist hashing
+  - Transposition Tables (TT) with complete position-state keys
   - Principal Variation Search (PVS) with move ordering
   - Deterministic move selection
 - **Asynchronous Architecture**: Decoupled FastAPI backend and React 19/Vite frontend with zero UI thread blocking during search.
@@ -97,7 +97,7 @@ The engine operates on a structured multi-stage evaluation and search pipeline:
   - Negative values favor Black.
   - Neutral values (~$0.0$) represent equal or balanced positions.
   *(Note: The neural network produces a normalized value assessment rather than centipawns).*
-- **Terminal State Evaluation**: Explicit terminal states (checkmate, stalemate, draw by repetition, fifty-move rule) are resolved directly by the search engine using decisive terminal bounds ($\pm 1000.0$) rather than relying on neural approximation.
+- **Terminal State Evaluation**: Explicit terminal states (checkmate, stalemate, draw by repetition, fifty-move rule) are resolved directly by the search engine using decisive terminal bounds ($\pm 10.0$, `MATE_SCORE = 10.0`) rather than relying on neural approximation.
 
 ---
 
@@ -126,8 +126,8 @@ Stage 5 utilizes a compiled TensorFlow graph inference wrapper (`tf.function(red
 - **Human Move Latency**: **< 3 ms** round-trip time for human move verification and state update.
 - **Search Latency**: Varies dynamically with position complexity, branching factor, and selected search depth:
   - **D1 Fast**: ~0.05–0.15s
-  - **D2 Standard**: ~0.8–2.0s
-  - **D3 Deep**: ~6.0–20.0s
+  - **D2 Standard**: generally takes a few seconds on the tested CPU and varies significantly with branching factor; validated branching-position runs were approximately 3.3–4.6s
+  - **D3 Deep**: substantially slower and position-dependent (~10–30s+ depending on branch count)
 
 ---
 
@@ -147,7 +147,7 @@ Clone the repository and set up both backend and frontend environments:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/APS-Machine-Learning/APS-Chess-AI.git
+git clone https://github.com/CALISKAN-EMRE/APS-Chess-AI.git
 cd APS-Chess-AI
 
 # 2. Install Python dependencies in Python 3.11
@@ -192,7 +192,7 @@ Open **http://localhost:5173** in your browser.
 
 ```
 APS-Chess-AI/
-├── green_team_stage4_fixed.py    # Frozen core engine (search, model, PVS, Zobrist TT)
+├── green_team_stage4_fixed.py    # Frozen core engine (search, model, PVS, Transposition Table)
 ├── chess_value_model.keras.zip   # Trained neural value network weights (~7.1 MB)
 ├── requirements.txt              # Python runtime dependencies
 ├── START_APS_CHESS.bat           # 1-click Windows stand launcher
