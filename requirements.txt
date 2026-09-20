@@ -1,0 +1,10 @@
+# APS Chess AI - Python Runtime Dependencies
+# Validated on Python 3.11 (Windows x86_64)
+
+tensorflow==2.21.0
+chess==1.11.2
+numpy>=1.26.0,<3.0.0
+fastapi==0.141.1
+uvicorn==0.53.0
+pydantic==2.13.5
+requests==2.34.2

@@ -1,0 +1,695 @@
+/* ==========================================================================
+   APS CHESS AI - EXHIBITION INSTRUMENT DESIGN SYSTEM
+   Brand Colors: APS Carmine (#ab1818), Deep Laboratory Slate (#090b10)
+   Aesthetic: Precision University Technology Exhibition / Research Instrument
+   ========================================================================== */
+
+:root {
+  /* Brand Tokens */
+  --aps-red: #ab1818;
+  --aps-red-hover: #be1b1b;
+  --aps-red-active: #8a1313;
+  --aps-red-subtle: rgba(171, 24, 24, 0.12);
+  --aps-red-border: rgba(171, 24, 24, 0.4);
+
+  /* Functional Status Tokens (Calm, Laboratory Compatible) */
+  --status-ready: #10b981;
+  --status-ready-bg: rgba(16, 185, 129, 0.12);
+  --status-ready-border: rgba(16, 185, 129, 0.28);
+  --status-computing: #ab1818;
+  --status-computing-bg: rgba(171, 24, 24, 0.14);
+  --status-computing-border: rgba(171, 24, 24, 0.35);
+  --status-neutral: #64748b;
+  --status-neutral-bg: rgba(100, 116, 139, 0.12);
+
+  /* Surfaces & Chassis (Engineered Physical Instrument) */
+  --surface-base: #090b10;
+  --surface-chassis: #0e1118;
+  --surface-console: #0f121a;
+  --surface-channel: #090b10;
+  --surface-elevated: #151923;
+  --surface-hover: #1c2130;
+  --surface-active: #22283a;
+  --surface-border: rgba(255, 255, 255, 0.08);
+  --surface-border-subtle: rgba(255, 255, 255, 0.05);
+  --surface-border-strong: rgba(255, 255, 255, 0.15);
+
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-dim: #475569;
+
+  /* Font Families */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Precision Chessboard Colors */
+  --board-light: #dce3ec;
+  --board-dark: #2b3748;
+  --board-coord-light: #475569;
+  --board-coord-dark: #94a3b8;
+  --sq-select-border: #ab1818;
+  --sq-select-bg: rgba(171, 24, 24, 0.16);
+  --sq-last-move: rgba(171, 24, 24, 0.12);
+  --sq-legal-dot: rgba(171, 24, 24, 0.42);
+
+  /* Radii & Transitions */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --transition-fast: 120ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset & Global */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  overflow: hidden !important;
+  background-color: var(--surface-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Structural Grid Background */
+body {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.012) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.012) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.app-shell {
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--surface-base);
+}
+
+/* Typography Utility */
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+.font-sans { font-family: var(--font-sans); }
+
+/* Custom Sleek Scrollbar */
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--aps-red);
+}
+
+/* ==========================================================================
+   WORKSPACE GRID (Chessboard Stage + Unified Instrument Console)
+   ========================================================================== */
+
+.exhibition-workspace {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(350px, 410px);
+  gap: clamp(12px, 1.8vw, 22px);
+  padding: clamp(6px, 0.9vh, 10px) clamp(16px, 2vw, 30px);
+  max-width: 1560px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN: Chessboard Stage */
+.board-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  justify-content: space-between;
+  overflow: hidden;
+  gap: clamp(4px, 0.7vh, 7px);
+}
+
+/* Center Stage: Integrated Board Chassis Housing Gauge + 8x8 Grid */
+.board-stage-center {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Single Integrated Board Chassis */
+.board-chassis {
+  position: relative;
+  background: var(--surface-chassis);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-border);
+  box-shadow: 
+    0 16px 40px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.03);
+  user-select: none;
+  height: min(calc(100dvh - 132px), 100%);
+  max-height: calc(100dvh - 132px);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+/* Integrated Precision Evaluation Gauge */
+.eval-gauge {
+  width: 8px;
+  height: 100%;
+  background: var(--surface-channel);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-xs);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.eval-gauge-tick {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.eval-gauge-fill {
+  width: 100%;
+  background: #f8fafc;
+  transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 0 0 1px 1px;
+}
+
+/* Chessboard 8x8 Grid */
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  aspect-ratio: 1 / 1;
+  height: 100%;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+/* Chess Squares */
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.square.light {
+  background-color: var(--board-light);
+  color: var(--board-coord-light);
+}
+
+.square.dark {
+  background-color: var(--board-dark);
+  color: var(--board-coord-dark);
+}
+
+/* Inset Coordinates */
+.coord-rank {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.coord-file {
+  position: absolute;
+  bottom: 1px;
+  right: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+/* Square Interactive States */
+.square.selected {
+  box-shadow: inset 0 0 0 2px var(--sq-select-border);
+  background-color: var(--sq-select-bg) !important;
+}
+
+.square.last-move {
+  background-color: var(--sq-last-move) !important;
+}
+
+.square.check {
+  background: radial-gradient(circle, rgba(171, 24, 24, 0.55) 0%, transparent 75%) !important;
+}
+
+/* Precision Legal Move Indicators */
+.legal-dot {
+  width: 22%;
+  height: 22%;
+  border-radius: 50%;
+  background-color: var(--sq-legal-dot);
+  pointer-events: none;
+}
+
+.legal-capture-bracket {
+  position: absolute;
+  inset: 3px;
+  border: 2px solid var(--aps-red);
+  border-radius: var(--radius-xs);
+  pointer-events: none;
+}
+
+/* Chess Pieces */
+.chess-piece {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.chess-piece:active {
+  cursor: grabbing;
+}
+
+/* Player Strips */
+.player-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+  background: var(--surface-chassis);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border-subtle);
+  font-size: 12px;
+  min-height: 28px;
+  box-sizing: border-box;
+}
+
+/* Precision Bullet Chess Clock */
+.chess-clock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  background: var(--surface-channel);
+  border: 1px solid var(--surface-border-subtle);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  box-sizing: border-box;
+  min-width: 64px;
+  justify-content: center;
+  user-select: none;
+  transition: all var(--transition-fast);
+}
+
+.chess-clock-badge .clock-time-display {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 36px;
+  text-align: right;
+}
+
+.chess-clock-badge.clock-active {
+  background: #141824;
+  border-color: rgba(255, 255, 255, 0.38);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.chess-clock-badge.clock-urgent {
+  background: var(--status-computing-bg);
+  border-color: var(--aps-red-border);
+  color: #fca5a5;
+}
+
+.chess-clock-badge.clock-expired {
+  background: rgba(171, 24, 24, 0.28);
+  border-color: var(--aps-red);
+  color: #f87171;
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: UNIFIED INSTRUMENT CONSOLE
+   (Single cohesive structure merging Telemetry, Controls, and Notation)
+   ========================================================================== */
+
+.instrument-console {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  background: var(--surface-console);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+/* Hairline Section Separator */
+.console-divider {
+  height: 1px;
+  background: var(--surface-border-subtle);
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Console Section Headers */
+.console-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Telemetry Section */
+.telemetry-section {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px 12px;
+  gap: 10px;
+}
+
+/* Hero Evaluation Display */
+.hero-eval-row {
+  display: flex;
+  align-items: flex-baseline;
+  justify-content: space-between;
+}
+
+.hero-eval-value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.hero-eval-unit {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+.hero-eval-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Horizontal Monolithic Telemetry Strip */
+.telemetry-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 7px 10px;
+  background: var(--surface-channel);
+  border: 1px solid var(--surface-border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0 4px;
+}
+
+.telemetry-item + .telemetry-item {
+  border-left: 1px solid var(--surface-border-subtle);
+}
+
+.telemetry-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.telemetry-val {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 1px;
+}
+
+/* Last Ply Subline */
+.last-ply-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Engineered Physical Controls */
+.controls-section {
+  padding: 10px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Recessed Segmented Rocker Switches */
+.segmented-channel {
+  background: var(--surface-channel);
+  border: 1px solid var(--surface-border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  display: grid;
+  gap: 2px;
+}
+
+.segmented-pill {
+  height: 26px;
+  border-radius: var(--radius-xs);
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.segmented-pill:hover:not(:disabled) {
+  color: var(--text-primary);
+}
+
+.segmented-pill.active {
+  background: var(--surface-elevated);
+  border-color: var(--surface-border-strong);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.segmented-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Engineered Action Buttons */
+.aps-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  outline: none;
+  user-select: none;
+}
+
+.aps-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.aps-btn-primary {
+  background: var(--aps-red);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.aps-btn-primary:hover:not(:disabled) {
+  background: var(--aps-red-hover);
+}
+
+.aps-btn-secondary {
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  border-color: var(--surface-border);
+}
+
+.aps-btn-secondary:hover:not(:disabled) {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+  border-color: var(--surface-border-strong);
+}
+
+.aps-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Compact SAN Move History */
+.history-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 70px;
+  overflow: hidden;
+}
+
+.history-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 14px 10px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.history-table tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.history-table tr.active-ply {
+  background: var(--aps-red-subtle);
+}
+
+.history-num {
+  width: 28px;
+  padding: 3px 2px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.history-san {
+  width: 45%;
+  padding: 3px 4px;
+  color: var(--text-primary);
+}
+
+/* Modal / Drawer */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.drawer-modal {
+  background: var(--surface-console);
+  border: 1px solid var(--surface-border-strong);
+  border-radius: var(--radius-lg);
+  max-width: 860px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Subtle Custom Dark Scrollbar for Modal Overlays */
+.drawer-modal::-webkit-scrollbar {
+  width: 6px;
+}
+.drawer-modal::-webkit-scrollbar-track {
+  background: rgba(9, 11, 16, 0.5);
+  border-radius: 4px;
+  margin: 10px 0;
+}
+.drawer-modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+}
+.drawer-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--aps-red);
+}
+

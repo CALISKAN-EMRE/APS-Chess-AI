@@ -1,0 +1,50 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Node.js dependencies & build distribution
+node_modules/
+stage5_ui/frontend/node_modules/
+dist/
+stage5_ui/frontend/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+*.log
+logs/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor files (contains machine-specific paths)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large external binaries (Stockfish is optional external reference, see README & THIRD_PARTY_NOTICES)
+stockfish.exe
+stockfish-windows-x86-64-universal.exe
+
+# Transient testing and scratch artifacts
+screenshot_test.png
+scratch/
